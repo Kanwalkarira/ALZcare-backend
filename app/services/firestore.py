@@ -37,9 +37,18 @@ class FirestoreService:
                 except Exception as e:
                     raise RuntimeError(f"Failed to parse FIREBASE_KEY_JSON: {e}")
             
-            # Priority 2: File path
+            # Priority 2: File path or JSON content
             elif settings.GOOGLE_APPLICATION_CREDENTIALS:
-                cred = credentials.Certificate(settings.GOOGLE_APPLICATION_CREDENTIALS)
+                json_str = settings.GOOGLE_APPLICATION_CREDENTIALS.strip()
+                if json_str.startswith('{') and json_str.endswith('}'):
+                    try:
+                        key_dict = json.loads(json_str)
+                        cred = credentials.Certificate(key_dict)
+                    except Exception as e:
+                        raise RuntimeError(f"GOOGLE_APPLICATION_CREDENTIALS looks like JSON but failed to parse: {e}")
+                else:
+                    # Treat as file path
+                    cred = credentials.Certificate(settings.GOOGLE_APPLICATION_CREDENTIALS)
             
             else:
                 raise RuntimeError(
