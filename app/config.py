@@ -16,7 +16,10 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
     
     # Firestore Configuration
-    GOOGLE_APPLICATION_CREDENTIALS: str
+    # Option 1: Path to the JSON file (for local dev)
+    GOOGLE_APPLICATION_CREDENTIALS: str = ""
+    # Option 2: The full JSON content as a string (for Railway/cloud)
+    FIREBASE_KEY_JSON: str = ""
     
     # Supabase Configuration
     SUPABASE_URL: str

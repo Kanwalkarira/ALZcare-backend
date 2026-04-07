@@ -10,6 +10,8 @@ from datetime import datetime
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import uuid
+import json
+import os
 
 from app.config import settings  # type: ignore
 
@@ -18,9 +20,33 @@ class FirestoreService:
     """Service for interacting with Firestore database."""
     
     def __init__(self):
-        """Initialize Firebase Admin SDK and Firestore client."""
+        """Initialize Firebase Admin SDK and Firestore client.
+        
+        Supports two modes:
+        - FIREBASE_KEY_JSON env var: paste the full JSON (for Railway/cloud)
+        - GOOGLE_APPLICATION_CREDENTIALS: path to the file (for local dev)
+        """
         if not firebase_admin._apps:
-            cred = credentials.Certificate(settings.GOOGLE_APPLICATION_CREDENTIALS)
+            cred = None
+            
+            # Priority 1: Inline JSON from environment variable
+            if settings.FIREBASE_KEY_JSON:
+                try:
+                    key_dict = json.loads(settings.FIREBASE_KEY_JSON)
+                    cred = credentials.Certificate(key_dict)
+                except Exception as e:
+                    raise RuntimeError(f"Failed to parse FIREBASE_KEY_JSON: {e}")
+            
+            # Priority 2: File path
+            elif settings.GOOGLE_APPLICATION_CREDENTIALS:
+                cred = credentials.Certificate(settings.GOOGLE_APPLICATION_CREDENTIALS)
+            
+            else:
+                raise RuntimeError(
+                    "No Firebase credentials found. "
+                    "Set FIREBASE_KEY_JSON or GOOGLE_APPLICATION_CREDENTIALS."
+                )
+            
             firebase_admin.initialize_app(cred)
         
         self.db = firestore.client()
