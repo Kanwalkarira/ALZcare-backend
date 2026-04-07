@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     # Firestore Configuration
     GOOGLE_APPLICATION_CREDENTIALS: str
     
+    # Supabase Configuration
+    SUPABASE_URL: str
+    SUPABASE_KEY: str
+    SUPABASE_BUCKET: str = "alzcare-storage-prod"
+    
     # API Configuration
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 8000
