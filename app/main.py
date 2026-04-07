@@ -29,8 +29,8 @@ logger = logging.getLogger(__name__)
 
 # Create FastAPI application
 app = FastAPI(
-    title="AlzCareApp Authentication API",
-    description="Secure authentication system with JWT and Firestore",
+    title="AlzCareApp Backend API",
+    description="Comprehensive backend for AlzCareApp providing Authentication, SOS, Quiz, and Patient Management.",
     version="1.0.0",
     docs_url="/docs" if settings.ENVIRONMENT == "development" else None,
     redoc_url="/redoc" if settings.ENVIRONMENT == "development" else None
@@ -124,7 +124,7 @@ app.include_router(routine_router)
 async def root():
     """Root endpoint."""
     return {
-        "message": "AlzCareApp Authentication API",
+        "message": "AlzCareApp Backend API",
         "version": "1.0.0",
         "docs": "/docs" if settings.ENVIRONMENT == "development" else "disabled"
     }

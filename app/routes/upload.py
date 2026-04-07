@@ -19,7 +19,7 @@ async def upload_quiz_image(
     current_user: UserInDB = Depends(require_role("caregiver"))
 ):
     """
-    Upload a quiz image to Firebase Storage.
+    Upload a quiz image to Supabase Storage.
     
     **Caregiver only endpoint.**
     
@@ -61,7 +61,7 @@ async def upload_quiz_image(
     if not image_url:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to upload image to Firebase Storage"
+            detail="Failed to upload image to Supabase Storage"
         )
     
     return {"image_url": image_url}

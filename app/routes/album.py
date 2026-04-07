@@ -28,7 +28,7 @@ async def create_album_entry(
 ):
     """
     Create a new album entry.
-    Uploads photo and optional voice note to Firebase Storage,
+    Uploads photo and optional voice note to Supabase Storage,
     then saves metadata to Firestore.
     
     **Caregiver only endpoint.**
